@@ -38,7 +38,11 @@ public abstract class Consulta {
      */
     public abstract TipoConsulta getTipoConsulta(); 
     
+    /**
+     *
+     * @throws ParseException
+     */
     public abstract void interpretar() throws ParseException;
-    
-    public abstract void executar();
+        
+    public abstract boolean isPalavraResevada(String token);
 }

@@ -6,7 +6,6 @@
 package model;
 
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -22,7 +21,22 @@ public class Insert extends Consulta {
 
     public Insert(String sql) {
         super(sql);
-    }   
+        nomeTabela = "";
+        listaColunas = new ArrayList<>();
+        listaValores = new ArrayList<>();
+    }
+    
+    public String getNomeTabela(){
+        return nomeTabela;
+    }
+    
+    public List<String> getListaColunas(){
+        return listaColunas;
+    }
+    
+    public List<String> getListaValores(){
+        return listaValores;
+    }
     
     @Override
     public TipoConsulta getTipoConsulta() {
@@ -30,52 +44,60 @@ public class Insert extends Consulta {
     }
 
     @Override
-    public void executar() {
-        
-    }
-
-    @Override
     public void interpretar() throws ParseException {
-        StringTokenizer tokenizer = new StringTokenizer(sql, " (),", true);
+        StringTokenizer tokenizer = new StringTokenizer(sql, " (),\n\r\t\f");
         String aux;
         ParseException e = new ParseException("Erro ao interpretar INSERT", 0);
         
         if ( !sql.contains("INSERT INTO ") || !sql.contains("VALUES") ){
             throw e;
-        }        
+        }
         
-        tokenizer.nextToken();
-        tokenizer.nextToken();
-        tokenizer.nextToken();
-        tokenizer.nextToken();
-        
-        nomeTabela = tokenizer.nextToken();
-                
-        listaColunas = new ArrayList<>();
-
-        while ( tokenizer.hasMoreTokens()  ) {
+        while ( tokenizer.hasMoreTokens() ){
             aux = tokenizer.nextToken();
-
-            if ( aux.equals("VALUES") ){
+            
+            switch (aux){
+                case "INSERT":
+                break;
+                
+                case "INTO":
+                    nomeTabela = tokenizer.nextToken();
+                    aux = tokenizer.nextToken();
+                    
+                    while ( !isPalavraResevada(aux) ){
+                        listaColunas.add(aux);
+                        aux = tokenizer.nextToken();
+                    }
+                break;
+                
+                case "VALUES":
+                    listaValores = new ArrayList<>( listaColunas.size() );
+                    
+                    while ( tokenizer.hasMoreTokens() ){
+                        aux = tokenizer.nextToken();
+                        listaValores.add(aux);
+                    }
                 break;
             }
-
-            listaColunas.add(aux);
-        }
-
-        listaValores = new ArrayList<>( listaColunas.size() );
-
-        while ( tokenizer.hasMoreTokens()  ) {
-            aux = tokenizer.nextToken();
-
-            listaValores.add(aux);
         }
 
         if ( listaColunas.size() != listaValores.size() ){
             throw e;
+        } 
+    }
+
+    @Override
+    public boolean isPalavraResevada(String token) {
+        String[] ignorados = {"INSERT", "INTO", "VALUES"};
+        boolean ignora = false;
+        
+        for (String s : ignorados) {
+            if ( s.equals(token) ){
+                ignora = true;
+                break;
+            }
         }
         
-        
-        throw e; 
+        return ignora;
     }
 }

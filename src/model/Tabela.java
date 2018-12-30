@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
@@ -22,7 +23,7 @@ import java.util.function.Predicate;
 public class Tabela {
     private long id;
     private String nome;
-    private Map<Long, List<Object> > mapaRegistros;
+    private Map<Long, Registro> mapaRegistros;
     private Map<String, Coluna> mapaTipos;
 
     public Tabela(String nome) {
@@ -48,18 +49,15 @@ public class Tabela {
         return nome;
     }
     
-    public void adicionarRegistro(long id, List<Object> campos)
+    public void adicionarRegistro(long id, Registro registro)
             throws NaoPodeCadastrarException
     {
         if ( mapaRegistros.containsKey(id) ) {
             throw new NaoPodeCadastrarException("Não é permitido duplicar um registro.");
         }
-                
-        if (campos == null) {
-            throw new NullPointerException("Parâmetro inválido para a inserção.");
-        }
-        
-        mapaRegistros.put(id, campos);        
+            
+        Objects.requireNonNull(registro, "Parâmetro inválido para a inserção.");       
+        mapaRegistros.put(id, registro);        
     }
     
     public void excluirRegistro(long id)
@@ -72,38 +70,35 @@ public class Tabela {
         mapaRegistros.remove(id);
     }
     
-    public boolean atualizarRegistro(long id, List<Object> antigo, List<Object> novo)
+    public boolean atualizarRegistro(long id, Registro antigo, Registro novo)
             throws NullPointerException, NaoPodeAtualizarException
     {
         if ( !mapaRegistros.containsKey(id) ) {
             throw new NaoPodeAtualizarException("O registro procurado não foi encontrado.");
         }
         
-        if (antigo == null || novo == null) {
-            throw new NullPointerException("Parâmetros inválidos para a consulta.");
-        }
-        
+        Objects.requireNonNull(antigo, "Parâmetros inválidos para a consulta.");
+        Objects.requireNonNull(novo, "Parâmetros inválidos para a consulta.");       
         return mapaRegistros.replace(id, antigo, novo);
     }
     
-    public List<Object> consultarRegistro(long id)
+    public Registro consultarRegistro(long id)
             throws NullPointerException, NaoPodePesquisarException
     {
         if ( !mapaRegistros.containsKey(id) ){
             throw new NaoPodePesquisarException("O registro procurado não foi encontrado.");
         }
         
-        List<Object> l = mapaRegistros.get(id);
+        Registro r = mapaRegistros.get(id);
         
-        if (l == null){
-            throw new NullPointerException("O registro não existe");
-        }
         
-        return l;
+        Objects.requireNonNull(r, "O registro não existe");
+        
+        return r;
     }
     
-    public List< List<Object> > consultarRegistros(Predicate< List<Object> > p){
-        ArrayList< List<Object> > lista = new ArrayList<>( mapaRegistros.values() );
+    public List<Registro> consultarRegistros(Predicate<Registro> p){
+        ArrayList<Registro> lista = new ArrayList<>( mapaRegistros.values() );
         
         lista.removeIf( p.negate() );
         

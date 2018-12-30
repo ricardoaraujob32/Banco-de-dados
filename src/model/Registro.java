@@ -19,6 +19,10 @@ public class Registro {
     public Registro(Tabela tabela) {
         this.tabela = tabela;
         listaDados = new ArrayList<>( tabela.consultarColunas().size() );
+        
+        listaDados.forEach((Dado d) -> {
+            d = new Null();
+        });
     }
             
     /**
@@ -33,7 +37,7 @@ public class Registro {
     }
     
     public void excluirDado(int indice){
-        listaDados.set(indice, null);
+        listaDados.set(indice, new Null() );
     }
     
     public Dado getDado(int indice){
@@ -41,6 +45,6 @@ public class Registro {
     }
     
     public boolean isNull(int indice){
-        return listaDados.get(indice) == null;
+        return listaDados.get(indice) instanceof Null;
     }
 }

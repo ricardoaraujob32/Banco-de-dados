@@ -6,34 +6,114 @@
 
 package model;
 
+import java.util.Set;
+
 /**
  *
  * @author ricardobalduino
  */
 public class Relacionamento {
-    private int id_tabela;
-    private int id_registro;
+    private Tabela tabelaDependente;
+    private Tabela tabelaAlvo;
+    private String nome;
+    private Coluna colunaDependente;
+    private Coluna colunaAlvo;
 
-    public Relacionamento(int id_tabela, int id_registro) {
-        this.id_tabela = id_tabela;
-        this.id_registro = id_registro;
+    public Relacionamento(String nome) {
+        this.nome = nome;
+        tabelaDependente = new Tabela("");
+        tabelaAlvo = new Tabela("");
     }
 
-    public void setId_tabela(int id_tabela) {
-        this.id_tabela = id_tabela;
+    /**
+     * @return the tabelaDependente
+     */
+    public Tabela getTabelaDependente() {
+        return tabelaDependente;
     }
 
-    public void setId_registro(int id_registro) {
-        this.id_registro = id_registro;
+    /**
+     * @return the tabelaAlvo
+     */
+    public Tabela getTabelaAlvo() {
+        return tabelaAlvo;
     }
 
-    public int getId_tabela() {
-        return id_tabela;
+    /**
+     * @return the nome
+     */
+    public String getNome() {
+        return nome;
     }
 
-    public int getId_registro() {
-        return id_registro;
+    /**
+     * @param tabelaDependente the tabelaDependente to set
+     */
+    public void setTabelaDependente(Tabela tabelaDependente) {
+        this.tabelaDependente = tabelaDependente;
+    }
+
+    /**
+     * @param tabelaAlvo the tabelaAlvo to set
+     */
+    public void setTabelaAlvo(Tabela tabelaAlvo) {
+        this.tabelaAlvo = tabelaAlvo;
+    }
+
+    /**
+     * @param nome the nome to set
+     */
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    /**
+     * @return the colunaDependente
+     */
+    public Coluna getColunaDependente() {
+        return colunaDependente;
+    }
+
+    /**
+     * @return the colunaAlvo
+     */
+    public Coluna getColunaAlvo() {
+        return colunaAlvo;
+    }
+
+    /**
+     * @param colunaDependente the colunaDependente to set
+     */
+    public void setColunaDependente(Coluna c) {
+        Set<Coluna> colunas = tabelaDependente.consultarColunas();
+        
+        for (Coluna coluna : colunas) {
+            if ( coluna.equals(c) ){
+                colunaDependente = c;
+                return;
+            }
+        }
+        
+        throw new IllegalArgumentException("Coluna inexistente");
+    }
+
+    /**
+     * @param colunaAlvo the colunaAlvo to set
+     */
+    public void setColunaAlvo(Coluna c) {
+        Set<Coluna> colunas = tabelaAlvo.consultarColunas();
+        
+        for (Coluna coluna : colunas) {
+            if ( coluna.equals(c) ){
+                colunaAlvo = c;
+                return;
+            }
+        }
+        
+        throw new IllegalArgumentException("Coluna inexistente");
     }
     
     
+    
+     
 }
