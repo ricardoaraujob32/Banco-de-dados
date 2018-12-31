@@ -6,13 +6,14 @@
 
 package model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
  *
  * @author ricardobalduino
  */
-public class Relacionamento {
+public class Relacionamento implements Serializable {
     private Tabela tabelaDependente;
     private Tabela tabelaAlvo;
     private String nome;

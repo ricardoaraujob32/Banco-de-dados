@@ -6,6 +6,7 @@
 
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -20,17 +21,19 @@ import java.util.function.Predicate;
  *
  * @author ricardobalduino
  */
-public class Tabela {
+public class Tabela implements Serializable {
     private long id;
     private String nome;
     private Map<Long, Registro> mapaRegistros;
     private Map<String, Coluna> mapaTipos;
+    private ChavePrimaria chavePrimaria;
 
     public Tabela(String nome) {
         this.id = nome.hashCode();
         this.nome = nome;
         this.mapaRegistros = new ConcurrentHashMap<>(50, 0.75f, 4);
         this.mapaTipos = new HashMap<>();
+        chavePrimaria = new ChavePrimaria();
     }
 
     public void setId(long id) {
@@ -89,8 +92,7 @@ public class Tabela {
             throw new NaoPodePesquisarException("O registro procurado não foi encontrado.");
         }
         
-        Registro r = mapaRegistros.get(id);
-        
+        Registro r = mapaRegistros.get(id);    
         
         Objects.requireNonNull(r, "O registro não existe");
         
@@ -153,4 +155,25 @@ public class Tabela {
 //            
 //        }
 //    }
+
+    /**
+     * @return the chavePrimaria
+     */
+    public ChavePrimaria getChavePrimaria() {
+        return chavePrimaria;
+    }
+
+    /**
+     * @param chavePrimaria the chavePrimaria to set
+     */
+    public void setChavePrimaria(String nome, Coluna coluna, boolean autoIncrement) {
+        if ( nome.trim().isEmpty() ){
+            nome = "pk_" + this.nome;
+        }
+        
+        Objects.requireNonNull(coluna, "A chave primária deve conter uma coluna");
+        chavePrimaria.setNome(nome);
+        chavePrimaria.setColuna(coluna);
+        chavePrimaria.setAutoIncrement(autoIncrement);
+    }
 }

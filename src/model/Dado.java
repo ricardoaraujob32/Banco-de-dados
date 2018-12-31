@@ -5,11 +5,13 @@
  */
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author ricardobalduino
  */
-public class Dado<E> {
+public class Dado<E> implements Cloneable, Serializable {
     private E dado;
 
     public Dado() {
@@ -32,6 +34,11 @@ public class Dado<E> {
      */
     public void setDado(E dado) {
         this.dado = dado;
+    }
+
+    @Override
+    public Dado<E> clone() throws CloneNotSupportedException {
+        return new Dado<>( getDado() );       
     }
         
 }

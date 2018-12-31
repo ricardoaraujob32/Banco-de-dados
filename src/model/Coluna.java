@@ -5,19 +5,30 @@
  */
 package model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
 /**
  *
  * @author ricardobalduino
  */
-public class Coluna {
+public class Coluna implements Cloneable, Serializable {
     private long id;
     private String nome;
     private TipoDados tipo;
+    private boolean chavePrimaria;
+    private boolean aceitaNull;
+    private List<Predicate> listaRestricoes;
 
     public Coluna(String nome, TipoDados tipo) {
         id = nome.hashCode();
         this.nome = nome;
         this.tipo = tipo;
+        chavePrimaria = false;
+        aceitaNull = true;
+        listaRestricoes = new ArrayList<>();
     }   
 
     /**
@@ -61,5 +72,41 @@ public class Coluna {
     public void setTipo(TipoDados tipo) {
         this.tipo = tipo;
     }
-    
+
+    @Override
+    public Coluna clone() throws CloneNotSupportedException {
+        return new Coluna(nome, tipo);
+    }
+
+    /**
+     * @return the chavePrimaria
+     */
+    public boolean isChavePrimaria() {
+        return chavePrimaria;
+    }
+
+    /**
+     * @param chavePrimaria the chavePrimaria to set
+     */
+    public void setChavePrimaria(boolean chavePrimaria) {
+        this.chavePrimaria = chavePrimaria;
+        
+        if ( chavePrimaria ){
+            aceitaNull = false;
+        }
+    }    
+
+    /**
+     * @return the aceitaNull
+     */
+    public boolean isAceitaNull() {
+        return aceitaNull;
+    }
+
+    /**
+     * @param aceitaNull the aceitaNull to set
+     */
+    public void setAceitaNull(boolean aceitaNull) {
+        this.aceitaNull = aceitaNull;
+    }
 }

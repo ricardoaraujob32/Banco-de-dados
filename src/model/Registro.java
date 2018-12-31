@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author ricardobalduino
  */
-public class Registro {
+public class Registro implements Serializable{
     private List<Dado> listaDados;
     private Tabela tabela;
 

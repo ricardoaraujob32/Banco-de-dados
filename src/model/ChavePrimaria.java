@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,15 +13,19 @@ import java.util.Set;
  *
  * @author ricardobalduino
  */
-public class ChavePrimaria {
+public class ChavePrimaria implements Serializable {
     private String nome;
     private Coluna coluna;
     private Set<Long> valores;
+    private boolean autoIncrement;
+    private AutoIncrementMemento memento;
 
     public ChavePrimaria() {
         nome = "";
         coluna = new Coluna("", TipoDados.LONG);
         valores = new HashSet<>();
+        autoIncrement = false;
+        memento = new AutoIncrementMemento();
     }
 
     /**
@@ -61,8 +66,44 @@ public class ChavePrimaria {
     /**
      * @param valores the valores to set
      */
-    public void setValores(Set<Long> valores) {
-        this.valores = valores;
+    public boolean adicionarValor(long num) {
+        return valores.add(num);
+    }
+
+    /**
+     * @return the autoIncrement
+     */
+    public boolean isAutoIncrement() {
+        return autoIncrement;
+    }
+
+    /**
+     * @return the memento
+     */
+    public long getUltimoValorAutoIncrement() {
+        long valor = memento.getUltimoValor();
+        
+        memento.setUltimoValor( valor + 1 );
+        
+        return valor;
+    }
+
+    /**
+     * @param autoIncrement the autoIncrement to set
+     */
+    public void setAutoIncrement(boolean autoIncrement) {
+        this.autoIncrement = autoIncrement;
+    }
+
+    /**
+     * @param memento the memento to set
+     */
+    public void setUltimoValorAutoIncrement(long valor) {
+        if (valor <= 0){
+            throw new IllegalArgumentException("O valor da chave primária não pode ser menor ou igual a zero");
+        }
+        
+        memento.setUltimoValor(valor);
     }
         
 }

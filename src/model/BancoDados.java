@@ -6,15 +6,18 @@
 
 package model;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  *
  * @author ricardobalduino
  */
-public class BancoDados {
+public class BancoDados implements Serializable {
     private Map<String, Tabela> mapaTabelas;
     private String nome;
+    private String caminhoArquivo;
+    private boolean modificado;
     
     /**
      * @return the nome
@@ -28,6 +31,34 @@ public class BancoDados {
      */
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    /**
+     * @return the caminhoArquivo
+     */
+    public String getCaminhoArquivo() {
+        return caminhoArquivo;
+    }
+
+    /**
+     * @return the modificado
+     */
+    public boolean isModificado() {
+        return modificado;
+    }
+
+    /**
+     * @param caminhoArquivo the caminhoArquivo to set
+     */
+    public void setCaminhoArquivo(String caminhoArquivo) {
+        this.caminhoArquivo = caminhoArquivo;
+    }
+
+    /**
+     * @param modificado the modificado to set
+     */
+    public void setModificado(boolean modificado) {
+        this.modificado = modificado;
     }
     
 }
