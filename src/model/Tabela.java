@@ -74,7 +74,7 @@ public class Tabela implements Serializable {
     }
     
     public boolean atualizarRegistro(long id, Registro antigo, Registro novo)
-            throws NullPointerException, NaoPodeAtualizarException
+            throws NaoPodeAtualizarException
     {
         if ( !mapaRegistros.containsKey(id) ) {
             throw new NaoPodeAtualizarException("O registro procurado não foi encontrado.");
@@ -86,7 +86,7 @@ public class Tabela implements Serializable {
     }
     
     public Registro consultarRegistro(long id)
-            throws NullPointerException, NaoPodePesquisarException
+            throws NaoPodePesquisarException
     {
         if ( !mapaRegistros.containsKey(id) ){
             throw new NaoPodePesquisarException("O registro procurado não foi encontrado.");
@@ -124,7 +124,7 @@ public class Tabela implements Serializable {
     }
     
     public boolean atualizarColuna(String nome, Coluna antigo, Coluna novo)
-            throws NullPointerException, NaoPodeAtualizarException
+            throws NaoPodeAtualizarException
     {
         if ( !mapaTipos.containsKey(nome) ) {
             throw new NaoPodeAtualizarException( String.format( "A coluna %s não existe!", nome ) );
@@ -175,5 +175,13 @@ public class Tabela implements Serializable {
         chavePrimaria.setNome(nome);
         chavePrimaria.setColuna(coluna);
         chavePrimaria.setAutoIncrement(autoIncrement);
+    }
+    
+    public Set<Long> consultarIds(){
+        return new HashSet<>( mapaRegistros.keySet() );
+    }
+
+    public Coluna consultarColuna(String coluna) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

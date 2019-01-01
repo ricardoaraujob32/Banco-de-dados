@@ -12,9 +12,33 @@ import model.BancoDados;
  * @author ricardobalduino
  */
 public interface DAO {
-    void criar() throws GenericDAOException;
-    void salvar() throws GenericDAOException;
-    BancoDados abrir() throws GenericDAOException;
-    void apagar() throws GenericDAOException;
-    void fechar() throws GenericDAOException;
+    
+    /**
+     *
+     * @param bd
+     * @throws GenericDAOException
+     */
+    void criar(BancoDados bd) throws GenericDAOException;
+    
+    /**
+     *
+     * @param bd
+     * @throws GenericDAOException
+     */
+    void salvar(BancoDados bd) throws GenericDAOException;
+
+    /**
+     *
+     * @param caminho
+     * @return
+     * @throws GenericDAOException
+     */
+    BancoDados abrir(String caminho) throws GenericDAOException;
+
+    /**
+     *
+     * @param bd
+     * @throws GenericDAOException
+     */
+    void apagar(BancoDados bd) throws GenericDAOException;
 }
